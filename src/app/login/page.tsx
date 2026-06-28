@@ -4,9 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import axiosInstance from "@/lib/axios";
+import { useAuth } from "@/context/AuthContext";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -25,8 +27,7 @@ export default function LoginPage() {
 
     try {
       const res = await axiosInstance.post("/auth/login", formData);
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      login(res.data.token, res.data.user);
       router.push("/");
     } catch (err: any) {
       setError(err.response?.data?.message || "Something went wrong.");
