@@ -6,22 +6,23 @@ import { motion } from "framer-motion";
 const topExperts = [
   {
     id: 1,
-    name: "Farah Ahmed",
-    hires: 142,
-    image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&auto=format&fit=crop&q=60",
+    name: "Sultana Bristy",
+    hires: 178,
+    image: "https://images.unsplash.com/photo-1552699611-e2c208d5d9cf?w=400&auto=format&fit=crop&q=60",
   },
   {
     id: 2,
-    name: "Tanvir Rahman",
+    name: "Sarim Ahmed",
     hires: 118,
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=60",
   },
   {
     id: 3,
-    name: "Sadia Karim",
-    hires: 97,
+     name: "Ayasha Tasnim",
+    hires: 92,
     image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=60",
   },
+    
 ];
 
 export default function TopExperts() {
