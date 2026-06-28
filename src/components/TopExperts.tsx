@@ -1,22 +1,38 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 const topExperts = [
-  { id: 1, name: "Farah Ahmed", hires: 142 },
-  { id: 2, name: "Tanvir Rahman", hires: 118 },
-  { id: 3, name: "Sadia Karim", hires: 97 },
+  {
+    id: 1,
+    name: "Farah Ahmed",
+    hires: 142,
+    image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&auto=format&fit=crop&q=60",
+  },
+  {
+    id: 2,
+    name: "Tanvir Rahman",
+    hires: 118,
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=60",
+  },
+  {
+    id: 3,
+    name: "Sadia Karim",
+    hires: 97,
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=60",
+  },
 ];
 
 export default function TopExperts() {
   return (
-    <section className="py-20 bg-gray-soft">
+    <section className="py-20 bg-primary">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="font-heading text-3xl sm:text-4xl text-primary mb-3">
+          <h2 className="font-heading text-3xl sm:text-4xl text-white mb-3">
             Top Legal Experts
           </h2>
-          <p className="text-text-muted">
+          <p className="text-white/60">
             Our most trusted lawyers, based on hiring history
           </p>
         </div>
@@ -29,13 +45,18 @@ export default function TopExperts() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white rounded-xl p-6 text-center shadow-sm"
+              className="bg-white/5 border border-white/10 rounded-xl p-6 text-center"
             >
-              <div className="w-20 h-20 rounded-full bg-primary text-white mx-auto mb-4 flex items-center justify-center text-2xl font-heading">
-                {expert.name.charAt(0)}
+              <div className="relative w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 ring-2 ring-white">
+                <Image
+                  src={expert.image}
+                  alt={expert.name}
+                  fill
+                  className="object-cover"
+                />
               </div>
-              <h3 className="font-medium text-primary mb-1">{expert.name}</h3>
-              <p className="text-sm text-text-muted">
+              <h3 className="font-medium text-white mb-1">{expert.name}</h3>
+              <p className="text-sm text-white/60">
                 {expert.hires} successful hires
               </p>
             </motion.div>
