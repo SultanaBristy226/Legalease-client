@@ -20,9 +20,9 @@ export default function Hero() {
         className="absolute inset-0 transition-all duration-500"
         style={{
           background: isDark
-            ? "linear-gradient(90deg, rgba(10,10,10,0.92) 0%, rgba(10,10,10,0.75) 45%, rgba(10,10,10,0.35) 100%)"
-            : "linear-gradient(90deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.65) 45%, rgba(255,255,255,0.15) 100%)",
-        }}
+             ? "linear-gradient(90deg, rgba(31, 31, 31, 0.92) 0%, rgba(10,10,10,0.75) 45%, rgba(10,10,10,0.35) 100%)"
+      : "linear-gradient(90deg, rgba(241, 241, 241, 0.84) 0%, rgba(41, 41, 41, 0.25) 45%, rgba(255,255,255,0.05) 100%)",
+  }}
       ></div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
@@ -40,7 +40,7 @@ export default function Hero() {
             Find &amp; Hire Expert Legal Counsel
           </h1>
 
-          <p className={`text-lg mb-8 max-w-md ${isDark ? "text-white/70" : "text-gray-600"}`}>
+          <p className={`text-lg mb-8 max-w-md ${isDark ? "text-white/70" : "text-gray-900"}`}>
             Connect with verified, experienced lawyers across every
             specialization. Fast, secure, and built for trust.
           </p>
