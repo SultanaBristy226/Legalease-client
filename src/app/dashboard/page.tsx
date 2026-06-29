@@ -1,35 +1,46 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { FiEdit2 } from "react-icons/fi";
 import { useAuth } from "@/context/AuthContext";
-import Link from "next/link";
 
 export default function DashboardHomePage() {
   const { user } = useAuth();
+  const router = useRouter();
 
   if (!user) return null;
 
   return (
     <div>
-      <h1 className="font-heading text-2xl text-primary mb-6">My Profile</h1>
-
-      <div className="border border-gray-border rounded-xl p-6 max-w-md">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="w-16 h-16 rounded-full bg-primary text-white flex items-center justify-center text-xl font-heading">
-            {user.fullName.charAt(0)}
-          </div>
-          <div>
-            <p className="font-medium text-primary">{user.fullName}</p>
-            <p className="text-sm text-text-muted">{user.email}</p>
-            <p className="text-xs uppercase text-text-muted mt-1">{user.role}</p>
-          </div>
+      <div className="border border-gray-border rounded-xl p-6">
+        <div className="flex items-center justify-between mb-5">
+          <p className="font-medium text-primary">Account Details</p>
+          <button
+            onClick={() => router.push("/dashboard/user/update-profile")}
+            className="flex items-center gap-1.5 bg-primary text-white text-xs font-medium px-4 py-2 rounded-full hover:bg-primary-light transition"
+          >
+            <FiEdit2 size={13} /> Edit
+          </button>
         </div>
 
-        <Link
-          href="/dashboard/user/update-profile"
-          className="inline-block bg-primary text-white text-sm font-medium px-5 py-2 rounded-full hover:bg-primary-light transition"
-        >
-          Update Profile
-        </Link>
+        <div className="grid grid-cols-2 gap-5">
+          <div>
+            <p className="text-xs text-text-muted mb-1">Full Name</p>
+            <p className="text-sm text-primary">{user.fullName}</p>
+          </div>
+          <div>
+            <p className="text-xs text-text-muted mb-1">Email</p>
+            <p className="text-sm text-primary">{user.email}</p>
+          </div>
+          <div>
+            <p className="text-xs text-text-muted mb-1">Role</p>
+            <p className="text-sm text-primary capitalize">{user.role}</p>
+          </div>
+          <div>
+            <p className="text-xs text-text-muted mb-1">Status</p>
+            <p className="text-sm text-green-700">Active</p>
+          </div>
+        </div>
       </div>
     </div>
   );

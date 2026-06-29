@@ -1,81 +1,48 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import axiosInstance from "@/lib/axios";
+import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
+import Link from "next/link";
 
-export default function UpdateProfilePage() {
-  const { user, login } = useAuth();
-  const router = useRouter();
-  const [fullName, setFullName] = useState(user?.fullName || "");
-  const [photoURL, setPhotoURL] = useState(user?.photoURL || "");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+export default function DashboardHomePage() {
+  const { user } = useAuth();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-    try {
-      const token = localStorage.getItem("token");
-      const res = await axiosInstance.patch(
-        "/users/update-profile",
-        { fullName, photoURL },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      login(token as string, res.data.user);
-      router.push("/dashboard");
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Something went wrong.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  if (!user) return null;
 
   return (
     <div>
-      <h1 className="font-heading text-2xl text-primary mb-6">Update Profile</h1>
+      <h1 className="font-heading text-2xl text-primary mb-6">My Profile</h1>
 
-      <form onSubmit={handleSubmit} className="max-w-md space-y-4">
-        {error && (
-          <p className="bg-red-50 text-red-600 text-sm rounded-md px-3 py-2">
-            {error}
-          </p>
-        )}
-
-        <div>
-          <label className="block text-sm text-text-muted mb-1">Full Name</label>
-          <input
-            type="text"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            required
-            className="w-full border border-gray-border rounded-md px-3 py-2 text-sm focus:outline-none focus:border-primary"
-          />
+      <div className="border border-gray-border rounded-xl p-6 max-w-md">
+        <div className="flex items-center gap-4 mb-6">
+          {user.photoURL ? (
+            <div className="relative w-16 h-16 rounded-full overflow-hidden">
+              <Image
+                src={user.photoURL}
+                alt={user.fullName}
+                fill
+                className="object-cover"
+              />
+            </div>
+          ) : (
+            <div className="w-16 h-16 rounded-full bg-primary text-white flex items-center justify-center text-xl font-heading">
+              {user.fullName.charAt(0)}
+            </div>
+          )}
+          <div>
+            <p className="font-medium text-primary">{user.fullName}</p>
+            <p className="text-sm text-text-muted">{user.email}</p>
+            <p className="text-xs uppercase text-text-muted mt-1">{user.role}</p>
+          </div>
         </div>
 
-        <div>
-          <label className="block text-sm text-text-muted mb-1">
-            Profile Picture URL
-          </label>
-          <input
-            type="text"
-            value={photoURL}
-            onChange={(e) => setPhotoURL(e.target.value)}
-            placeholder="https://..."
-            className="w-full border border-gray-border rounded-md px-3 py-2 text-sm focus:outline-none focus:border-primary"
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-primary text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-primary-light transition disabled:opacity-60"
+        <Link
+          href="/dashboard/user/update-profile"
+          className="inline-block bg-primary text-white text-sm font-medium px-5 py-2 rounded-full hover:bg-primary-light transition"
         >
-          {loading ? "Saving..." : "Save Changes"}
-        </button>
-      </form>
+          Update Profile
+        </Link>
+      </div>
     </div>
   );
 }

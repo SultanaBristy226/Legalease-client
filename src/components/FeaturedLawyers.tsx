@@ -49,12 +49,12 @@ const placeholderLawyers = [
 
 export default function FeaturedLawyers() {
   return (
-    <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 dark:bg-[#0a0a0a]">
       <div className="text-center mb-12">
-        <h2 className="font-heading text-3xl sm:text-4xl text-primary mb-3">
+        <h2 className="font-heading text-3xl sm:text-4xl text-primary dark:text-white mb-3">
           Featured Lawyers
         </h2>
-        <p className="text-text-muted">
+        <p className="text-text-muted dark:text-white/50">
           Meet some of our top-rated legal professionals
         </p>
       </div>
@@ -66,9 +66,9 @@ export default function FeaturedLawyers() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.08 }}
-            className="border-2 border-primary rounded-xl p-5 text-center bg-white hover:bg-primary transition-all duration-300 group cursor-pointer"
+            className="border-2 border-primary dark:border-white/20 rounded-xl p-5 text-center bg-white dark:bg-white/5 hover:bg-primary transition-all duration-300 group cursor-pointer"
           >
-            <div className="relative w-16 h-16 rounded-full overflow-hidden mx-auto mb-3 ring-2 ring-primary group-hover:ring-white transition-all duration-300">
+            <div className="relative w-16 h-16 rounded-full overflow-hidden mx-auto mb-3 ring-2 ring-primary dark:ring-white/30 group-hover:ring-white transition-all duration-300">
               <Image
                 src={lawyer.image}
                 alt={lawyer.name}
@@ -77,13 +77,13 @@ export default function FeaturedLawyers() {
                 className="object-cover"
               />
             </div>
-            <h3 className="font-medium text-primary group-hover:text-white mb-1 transition-colors duration-300">
+            <h3 className="font-medium text-primary dark:text-white group-hover:text-white mb-1 transition-colors duration-300">
               {lawyer.name}
             </h3>
-            <p className="text-sm text-text-muted group-hover:text-white/70 mb-2 transition-colors duration-300">
+            <p className="text-sm text-text-muted dark:text-white/50 group-hover:text-white/70 mb-2 transition-colors duration-300">
               {lawyer.specialization}
             </p>
-            <p className="text-sm font-semibold text-primary group-hover:text-white transition-colors duration-300">
+            <p className="text-sm font-semibold text-primary dark:text-white group-hover:text-white transition-colors duration-300">
               ${lawyer.rate}/hr
             </p>
           </motion.div>
