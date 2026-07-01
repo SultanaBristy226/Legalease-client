@@ -41,12 +41,12 @@ export default function BrowseLawyersPage() {
   }, [search, page]);
 
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 dark:bg-[#0a0a0a]">
       <div className="text-center mb-10">
-        <h1 className="font-heading text-3xl sm:text-4xl text-primary mb-3">
+        <h1 className="font-heading text-3xl sm:text-4xl text-primary dark:text-white mb-3">
           Browse Lawyers
         </h1>
-        <p className="text-text-muted">
+        <p className="text-text-muted dark:text-white/50">
           Find the right legal expert for your needs
         </p>
       </div>
@@ -60,7 +60,7 @@ export default function BrowseLawyersPage() {
             setPage(1);
           }}
           placeholder="Search by name or specialization..."
-          className="w-full border border-gray-border rounded-full px-5 py-2.5 text-sm focus:outline-none focus:border-primary"
+          className="w-full border border-gray-border dark:border-white/10 rounded-full px-5 py-2.5 text-sm focus:outline-none focus:border-primary bg-white dark:bg-white/5 text-primary dark:text-white placeholder:text-text-muted dark:placeholder:text-white/40"
         />
       </div>
 
@@ -69,12 +69,12 @@ export default function BrowseLawyersPage() {
           {[...Array(8)].map((_, i) => (
             <div
               key={i}
-              className="border border-gray-border rounded-xl p-5 h-56 bg-gray-soft animate-pulse"
+              className="border border-gray-border dark:border-white/10 rounded-xl p-5 h-56 bg-gray-soft dark:bg-white/5 animate-pulse"
             ></div>
           ))}
         </div>
       ) : lawyers.length === 0 ? (
-        <p className="text-center text-text-muted py-20">
+        <p className="text-center text-text-muted dark:text-white/50 py-20">
           No lawyers found matching your search.
         </p>
       ) : (
@@ -84,14 +84,14 @@ export default function BrowseLawyersPage() {
               <Link
                 key={lawyer._id}
                 href={`/lawyers/${lawyer._id}`}
-                className="border-2 border-primary rounded-xl p-5 text-center bg-white hover:bg-primary transition group relative"
+                className="border-2 border-primary dark:border-white/20 rounded-xl p-5 text-center bg-white dark:bg-white/5 hover:bg-primary transition group relative"
               >
                 {lawyer.status === "busy" && (
                   <span className="absolute top-3 right-3 bg-primary text-white text-xs px-2 py-0.5 rounded-full group-hover:bg-white group-hover:text-primary">
                     Busy
                   </span>
                 )}
-                <div className="relative w-16 h-16 rounded-full overflow-hidden mx-auto mb-3 ring-2 ring-primary group-hover:ring-white transition">
+                <div className="relative w-16 h-16 rounded-full overflow-hidden mx-auto mb-3 ring-2 ring-primary dark:ring-white/30 group-hover:ring-white transition">
                   <Image
                     src={lawyer.photo}
                     alt={lawyer.name}
@@ -99,13 +99,13 @@ export default function BrowseLawyersPage() {
                     className="object-cover"
                   />
                 </div>
-                <h3 className="font-medium text-primary group-hover:text-white mb-1 transition">
+                <h3 className="font-medium text-primary dark:text-white group-hover:text-white mb-1 transition">
                   {lawyer.name}
                 </h3>
-                <p className="text-sm text-text-muted group-hover:text-white/70 mb-2 transition">
+                <p className="text-sm text-text-muted dark:text-white/50 group-hover:text-white/70 mb-2 transition">
                   {lawyer.specialization}
                 </p>
-                <p className="text-sm font-semibold text-primary group-hover:text-white transition">
+                <p className="text-sm font-semibold text-primary dark:text-white group-hover:text-white transition">
                   ${lawyer.hourlyRate}/hr
                 </p>
               </Link>
@@ -121,7 +121,7 @@ export default function BrowseLawyersPage() {
                   className={`w-9 h-9 rounded-full text-sm font-medium transition ${
                     page === i + 1
                       ? "bg-primary text-white"
-                      : "border border-gray-border text-primary hover:bg-gray-soft"
+                      : "border border-gray-border dark:border-white/10 text-primary dark:text-white hover:bg-gray-soft dark:hover:bg-white/10"
                   }`}
                 >
                   {i + 1}

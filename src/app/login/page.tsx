@@ -37,21 +37,21 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-[80vh] flex items-center justify-center bg-white px-4 py-12">
-      <div className="w-full max-w-md border border-gray-border rounded-xl p-8">
-        <h1 className="font-heading text-2xl text-primary mb-6 text-center">
+    <main className="min-h-[80vh] flex items-center justify-center bg-white dark:bg-[#0a0a0a] px-4 py-12">
+      <div className="w-full max-w-md border border-gray-border dark:border-white/10 rounded-xl p-8 bg-white dark:bg-white/5">
+        <h1 className="font-heading text-2xl text-primary dark:text-white mb-6 text-center">
           Welcome Back
         </h1>
 
         {error && (
-          <p className="bg-red-50 text-red-600 text-sm rounded-md px-3 py-2 mb-4">
+          <p className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm rounded-md px-3 py-2 mb-4">
             {error}
           </p>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm text-text-muted mb-1">
+            <label className="block text-sm text-text-muted dark:text-white/60 mb-1">
               Email
             </label>
             <input
@@ -60,12 +60,12 @@ export default function LoginPage() {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full border border-gray-border rounded-md px-3 py-2 text-sm focus:outline-none focus:border-primary"
+              className="w-full border border-gray-border dark:border-white/10 rounded-md px-3 py-2 text-sm bg-white dark:bg-white/5 text-primary dark:text-white focus:outline-none focus:border-primary placeholder:text-text-muted dark:placeholder:text-white/40"
             />
           </div>
 
           <div>
-            <label className="block text-sm text-text-muted mb-1">
+            <label className="block text-sm text-text-muted dark:text-white/60 mb-1">
               Password
             </label>
             <input
@@ -74,22 +74,22 @@ export default function LoginPage() {
               value={formData.password}
               onChange={handleChange}
               required
-              className="w-full border border-gray-border rounded-md px-3 py-2 text-sm focus:outline-none focus:border-primary"
+              className="w-full border border-gray-border dark:border-white/10 rounded-md px-3 py-2 text-sm bg-white dark:bg-white/5 text-primary dark:text-white focus:outline-none focus:border-primary placeholder:text-text-muted dark:placeholder:text-white/40"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-primary text-white rounded-md py-2.5 text-sm font-medium hover:bg-primary-light transition disabled:opacity-60"
+            className="w-full bg-primary dark:bg-white text-white dark:text-primary rounded-md py-2.5 text-sm font-medium hover:bg-primary-light dark:hover:bg-gray-soft transition disabled:opacity-60"
           >
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
-        <p className="text-sm text-text-muted text-center mt-6">
+        <p className="text-sm text-text-muted dark:text-white/50 text-center mt-6">
           Don&apos;t have an account?{" "}
-          <Link href="/register" className="text-primary font-medium">
+          <Link href="/register" className="text-primary dark:text-white font-medium">
             Sign Up
           </Link>
         </p>
