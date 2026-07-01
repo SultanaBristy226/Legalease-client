@@ -19,11 +19,20 @@ export default function UserCommentsPage() {
     const fetchComments = async () => {
       try {
         const token = localStorage.getItem("token");
+        
+        // Check if token exists
+        if (!token) {
+          setError("Please login to view your comments.");
+          setLoading(false);
+          return;
+        }
+
         const res = await axiosInstance.get("/comments/my-comments", {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { 
+            Authorization: `Bearer ${token}` 
+          },
         });
         
-        // Check if response has comments array
         if (res.data && Array.isArray(res.data.comments)) {
           setComments(res.data.comments);
         } else {
@@ -31,7 +40,11 @@ export default function UserCommentsPage() {
         }
       } catch (err: any) {
         console.error("Failed to fetch comments:", err);
-        setError(err.response?.data?.message || "Failed to load comments.");
+        if (err.response?.status === 401) {
+          setError("Session expired. Please login again.");
+        } else {
+          setError(err.response?.data?.message || "Failed to load comments.");
+        }
         setComments([]);
       } finally {
         setLoading(false);
