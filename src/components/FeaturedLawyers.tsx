@@ -1,55 +1,75 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import axiosInstance from "@/lib/axios";
 
-const placeholderLawyers = [
-  {
-    id: 1,
-    name: "Sultana Bristy",
-    specialization: "Corporate Law",
-    rate: 60,
-    image: "https://images.unsplash.com/photo-1552699611-e2c208d5d9cf?w=400&auto=format&fit=crop&q=60",
-  },
-  {
-    id: 2,
-    name: "Jamil Joy",
-    specialization: "Family Law",
-    rate: 45,
-    image: "https://images.unsplash.com/photo-1528900403525-dc523d4f18d6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8eW91bmclMjBtYW58ZW58MHx8MHx8fDA%3D",
-  },
-  {
-    id: 3,
-    name: "Raihan Ahmed",
-    specialization: "Tax Law",
-    rate: 55,
-    image: "https://images.unsplash.com/photo-1624797432677-6f803a98acb3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8eW91bmclMjBtYW58ZW58MHx8MHx8fDA%3D",
-  },
-  {
-    id: 4,
-    name: "Amina Meem",
-    specialization: "Property Law",
-    rate: 50,
-    image: "https://images.unsplash.com/photo-1690444963408-9573a17a8058?w=400&auto=format&fit=crop&q=60",
-  },
-  {
-    id: 5,
-    name: "Saima Rahman",
-    specialization: "Criminal Law",
-    rate: 65,
-    image: "https://images.unsplash.com/photo-1690149346865-11563e802dfb?w=400&auto=format&fit=crop&q=60",
-  },
-  {
-    id: 6,
-    name: "Khadija Islam",
-    specialization: "Immigration Law",
-    rate: 48,
-    image: "https://images.unsplash.com/photo-1609505848912-b7c3b8b4beda?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8d29tYW58ZW58MHx8MHx8fDA%3D",
-  },
-];
+type Lawyer = {
+  _id: string;
+  name: string;
+  photo: string;
+  specialization: string;
+  hourlyRate: number;
+  status: string;
+};
 
 export default function FeaturedLawyers() {
+  const [lawyers, setLawyers] = useState<Lawyer[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchLawyers = async () => {
+      try {
+        const res = await axiosInstance.get("/lawyers", {
+          params: { limit: 6, page: 1 }, // Only 6 lawyers
+        });
+        setLawyers(res.data.lawyers || []);
+      } catch (err) {
+        console.error("Failed to fetch featured lawyers:", err);
+        setLawyers([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchLawyers();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 dark:bg-[#0a0a0a]">
+        <div className="text-center mb-12">
+          <h2 className="font-heading text-3xl sm:text-4xl text-primary dark:text-white mb-3">
+            Featured Lawyers
+          </h2>
+          <p className="text-text-muted dark:text-white/50">Loading...</p>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+          {[...Array(6)].map((_, i) => (
+            <div
+              key={i}
+              className="border-2 border-primary dark:border-white/20 rounded-xl p-5 text-center bg-white dark:bg-white/5 animate-pulse h-64"
+            ></div>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  if (lawyers.length === 0) {
+    return (
+      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 dark:bg-[#0a0a0a]">
+        <div className="text-center mb-12">
+          <h2 className="font-heading text-3xl sm:text-4xl text-primary dark:text-white mb-3">
+            Featured Lawyers
+          </h2>
+          <p className="text-text-muted dark:text-white/50">No lawyers available yet.</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 dark:bg-[#0a0a0a]">
       <div className="text-center mb-12">
@@ -62,21 +82,21 @@ export default function FeaturedLawyers() {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-        {placeholderLawyers.map((lawyer, index) => (
+        {lawyers.map((lawyer, index) => (
           <motion.div
-            key={lawyer.id}
+            key={lawyer._id}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.08 }}
           >
             <Link
-              href={`/lawyers/${lawyer.id}`}
+              href={`/lawyers/${lawyer._id}`}
               className="block border-2 border-primary dark:border-white/20 rounded-xl p-5 text-center bg-white dark:bg-white/5 hover:bg-primary transition-all duration-300 group cursor-pointer"
             >
               <div className="relative w-16 h-16 rounded-full overflow-hidden mx-auto mb-3 ring-2 ring-primary dark:ring-white/30 group-hover:ring-white transition-all duration-300">
                 <Image
-                  src={lawyer.image}
+                  src={lawyer.photo}
                   alt={lawyer.name}
                   fill
                   sizes="64px"
@@ -90,7 +110,7 @@ export default function FeaturedLawyers() {
                 {lawyer.specialization}
               </p>
               <p className="text-sm font-semibold text-primary dark:text-white group-hover:text-white transition-colors duration-300">
-                ${lawyer.rate}/hr
+                ${lawyer.hourlyRate}/hr
               </p>
             </Link>
           </motion.div>

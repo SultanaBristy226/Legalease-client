@@ -351,7 +351,7 @@ export default function LawyerDetailsPage() {
                     <span className="text-xs text-text-muted dark:text-white/40">
                       {new Date(c.createdAt).toLocaleDateString()}
                     </span>
-                    {user && user._id === c.user?._id && (
+                    {user && user.id === c.user?._id && (
                       <button
                         onClick={() => handleDeleteComment(c._id)}
                         className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-xs"
