@@ -19,7 +19,7 @@ type Lawyer = {
 
 type Comment = {
   _id: string;
-  user: { fullName: string; photoURL?: string };
+  user: { _id: string; fullName: string; photoURL?: string };
   text: string;
   rating?: number;
   type?: string;
