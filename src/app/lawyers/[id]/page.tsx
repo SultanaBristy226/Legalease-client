@@ -19,8 +19,10 @@ type Lawyer = {
 
 type Comment = {
   _id: string;
-  user: { fullName: string };
+  user: { fullName: string; photoURL?: string };
   text: string;
+  rating?: number;
+  type?: string;
   createdAt: string;
 };
 
@@ -35,6 +37,7 @@ export default function LawyerDetailsPage() {
   const [hireLoading, setHireLoading] = useState(false);
 
   const [comment, setComment] = useState("");
+  const [rating, setRating] = useState(3);
   const [comments, setComments] = useState<Comment[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [commentError, setCommentError] = useState("");
@@ -55,15 +58,13 @@ export default function LawyerDetailsPage() {
     if (id) fetchLawyer();
   }, [id]);
 
-  // ============================================================
-  // ========== COMMENT FETCH FUNCTION (ঠিক এখানে) ==========
-  // ============================================================
+  // Fetch comments
   useEffect(() => {
     const fetchComments = async () => {
       setCommentsLoading(true);
       try {
         const res = await axiosInstance.get(`/comments/lawyer/${id}`);
-        console.log("Comments response:", res.data); // ← এই লাইন যোগ করো
+        console.log("Comments response:", res.data);
         if (res.data && Array.isArray(res.data.comments)) {
           setComments(res.data.comments);
         } else {
@@ -84,7 +85,6 @@ export default function LawyerDetailsPage() {
       setCommentsLoading(false);
     }
   }, [id]);
-  // ============================================================
 
   const handleHire = async () => {
     setHireLoading(true);
@@ -128,11 +128,12 @@ export default function LawyerDetailsPage() {
       const token = localStorage.getItem("token");
       await axiosInstance.post(
         "/comments",
-        { lawyerId: id, text: comment },
+        { lawyerId: id, text: comment, rating },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       
       setComment("");
+      setRating(3);
       
       // Refresh comments after posting
       const res = await axiosInstance.get(`/comments/lawyer/${id}`);
@@ -148,6 +149,31 @@ export default function LawyerDetailsPage() {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handleDeleteComment = async (commentId: string) => {
+    if (!confirm("Are you sure you want to delete this comment?")) return;
+    
+    try {
+      const token = localStorage.getItem("token");
+      await axiosInstance.delete(`/comments/${commentId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      // Refresh comments
+      const res = await axiosInstance.get(`/comments/lawyer/${id}`);
+      if (res.data && Array.isArray(res.data.comments)) {
+        setComments(res.data.comments);
+      } else {
+        setComments([]);
+      }
+    } catch (err: any) {
+      alert(err.response?.data?.message || "Failed to delete comment.");
+    }
+  };
+
+  const renderStars = (rating: number = 0) => {
+    return "⭐".repeat(Math.min(Math.round(rating), 5)) + "☆".repeat(Math.max(0, 5 - Math.round(rating)));
   };
 
   if (loading) {
@@ -240,10 +266,33 @@ export default function LawyerDetailsPage() {
         </h2>
 
         {user && user.role === "user" && (
-          <form onSubmit={handleSubmitComment} className="mb-6">
+          <form onSubmit={handleSubmitComment} className="mb-6 p-4 border border-gray-border dark:border-white/10 rounded-lg bg-gray-soft/30 dark:bg-white/5">
             {commentError && (
               <p className="text-red-600 dark:text-red-400 text-sm mb-2">{commentError}</p>
             )}
+            
+            {/* Rating Stars */}
+            <div className="mb-3">
+              <label className="block text-sm text-text-muted dark:text-white/60 mb-1">
+                Your Rating
+              </label>
+              <div className="flex gap-1">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    onClick={() => setRating(star)}
+                    className="text-2xl transition hover:scale-110"
+                  >
+                    {star <= rating ? "⭐" : "☆"}
+                  </button>
+                ))}
+                <span className="text-sm text-text-muted dark:text-white/40 ml-2 mt-1">
+                  ({rating}/5)
+                </span>
+              </div>
+            </div>
+
             <textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}
@@ -278,15 +327,41 @@ export default function LawyerDetailsPage() {
           <div className="space-y-4">
             {comments.map((c) => (
               <div key={c._id} className="border-b border-gray-border dark:border-white/10 pb-4 last:border-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="font-medium text-primary dark:text-white">
-                    {c.user?.fullName || "Anonymous"}
-                  </span>
-                  <span className="text-xs text-text-muted dark:text-white/40">
-                    {new Date(c.createdAt).toLocaleDateString()}
-                  </span>
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-primary dark:text-white">
+                      {c.user?.fullName || "Anonymous"}
+                    </span>
+                    {c.rating && (
+                      <span className="text-sm">
+                        {renderStars(c.rating)}
+                      </span>
+                    )}
+                    {c.type && (
+                      <span className={`text-xs px-2 py-0.5 rounded-full ${
+                        c.type === "positive" ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400" :
+                        c.type === "negative" ? "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400" :
+                        "bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-gray-400"
+                      }`}>
+                        {c.type}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-text-muted dark:text-white/40">
+                      {new Date(c.createdAt).toLocaleDateString()}
+                    </span>
+                    {user && user._id === c.user?._id && (
+                      <button
+                        onClick={() => handleDeleteComment(c._id)}
+                        className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-xs"
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </div>
                 </div>
-                <p className="text-sm text-text-muted dark:text-white/60">{c.text}</p>
+                <p className="text-sm text-text-muted dark:text-white/60 mt-1">{c.text}</p>
               </div>
             ))}
           </div>
