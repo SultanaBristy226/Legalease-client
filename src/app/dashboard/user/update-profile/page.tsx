@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import axiosInstance from "@/lib/axios";
 import { useAuth } from "@/context/AuthContext";
@@ -28,11 +29,9 @@ export default function UpdateProfilePage() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       
-      // Update auth context with new user data
       login(token as string, res.data.user);
       setSuccess("Profile updated successfully!");
       
-      // Redirect after 1.5 seconds
       setTimeout(() => {
         router.push("/dashboard");
       }, 1500);
@@ -62,6 +61,31 @@ export default function UpdateProfilePage() {
           </p>
         )}
 
+        {/* Profile Picture Preview */}
+        <div className="flex items-center gap-4 p-4 border border-gray-border dark:border-white/10 rounded-lg">
+          {photoURL ? (
+            <div className="relative w-16 h-16 rounded-full overflow-hidden ring-2 ring-primary">
+              <Image
+                src={photoURL}
+                alt="Profile preview"
+                fill
+                sizes="64px"
+                className="object-cover"
+              />
+            </div>
+          ) : (
+            <div className="w-16 h-16 rounded-full bg-primary text-white flex items-center justify-center text-xl font-heading">
+              {fullName?.charAt(0) || "U"}
+            </div>
+          )}
+          <div>
+            <p className="text-sm font-medium text-primary dark:text-white">Profile Picture</p>
+            <p className="text-xs text-text-muted dark:text-white/40">
+              {photoURL ? "Image loaded" : "No image selected"}
+            </p>
+          </div>
+        </div>
+
         <div>
           <label className="block text-sm text-text-muted dark:text-white/60 mb-1">
             Full Name
@@ -83,9 +107,12 @@ export default function UpdateProfilePage() {
             type="text"
             value={photoURL}
             onChange={(e) => setPhotoURL(e.target.value)}
-            placeholder="https://..."
+            placeholder="https://images.unsplash.com/..."
             className="w-full border border-gray-border dark:border-white/10 rounded-md px-3 py-2 text-sm bg-white dark:bg-white/5 text-primary dark:text-white focus:outline-none focus:border-primary placeholder:text-text-muted dark:placeholder:text-white/40"
           />
+          <p className="text-xs text-text-muted dark:text-white/40 mt-1">
+            Paste an image URL from Unsplash or any image hosting service
+          </p>
         </div>
 
         <button
