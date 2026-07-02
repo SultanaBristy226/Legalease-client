@@ -1,4 +1,6 @@
 "use client";
+
+import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
@@ -58,6 +60,7 @@ export default function FeaturedLawyers() {
           Meet some of our top-rated legal professionals
         </p>
       </div>
+
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
         {placeholderLawyers.map((lawyer, index) => (
           <motion.div
@@ -66,26 +69,30 @@ export default function FeaturedLawyers() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.08 }}
-            className="border-2 border-primary dark:border-white/20 rounded-xl p-5 text-center bg-white dark:bg-white/5 hover:bg-primary transition-all duration-300 group cursor-pointer"
           >
-            <div className="relative w-16 h-16 rounded-full overflow-hidden mx-auto mb-3 ring-2 ring-primary dark:ring-white/30 group-hover:ring-white transition-all duration-300">
-              <Image
-                src={lawyer.image}
-                alt={lawyer.name}
-                fill
-                sizes="64px"
-                className="object-cover"
-              />
-            </div>
-            <h3 className="font-medium text-primary dark:text-white group-hover:text-white mb-1 transition-colors duration-300">
-              {lawyer.name}
-            </h3>
-            <p className="text-sm text-text-muted dark:text-white/50 group-hover:text-white/70 mb-2 transition-colors duration-300">
-              {lawyer.specialization}
-            </p>
-            <p className="text-sm font-semibold text-primary dark:text-white group-hover:text-white transition-colors duration-300">
-              ${lawyer.rate}/hr
-            </p>
+            <Link
+              href={`/lawyers/${lawyer.id}`}
+              className="block border-2 border-primary dark:border-white/20 rounded-xl p-5 text-center bg-white dark:bg-white/5 hover:bg-primary transition-all duration-300 group cursor-pointer"
+            >
+              <div className="relative w-16 h-16 rounded-full overflow-hidden mx-auto mb-3 ring-2 ring-primary dark:ring-white/30 group-hover:ring-white transition-all duration-300">
+                <Image
+                  src={lawyer.image}
+                  alt={lawyer.name}
+                  fill
+                  sizes="64px"
+                  className="object-cover"
+                />
+              </div>
+              <h3 className="font-medium text-primary dark:text-white group-hover:text-white mb-1 transition-colors duration-300">
+                {lawyer.name}
+              </h3>
+              <p className="text-sm text-text-muted dark:text-white/50 group-hover:text-white/70 mb-2 transition-colors duration-300">
+                {lawyer.specialization}
+              </p>
+              <p className="text-sm font-semibold text-primary dark:text-white group-hover:text-white transition-colors duration-300">
+                ${lawyer.rate}/hr
+              </p>
+            </Link>
           </motion.div>
         ))}
       </div>
