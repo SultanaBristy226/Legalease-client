@@ -1,7 +1,7 @@
 # LegalEase - Online Lawyer Hiring Platform
 
 ## Live Demo
-- **Website**: https://legalease-client-weld.vercel.app
+- **Website**: https://legalease-client-opal.vercel.app/
 - **API Server**: https://legalease-server-iqg1.onrender.com
 
 ---
