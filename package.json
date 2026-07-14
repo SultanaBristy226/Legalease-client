@@ -9,6 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@stripe/react-stripe-js": "^6.7.0",
+    "@stripe/stripe-js": "^9.10.0",
     "axios": "^1.18.1",
     "framer-motion": "^12.42.0",
     "mongoose": "^9.7.3",
