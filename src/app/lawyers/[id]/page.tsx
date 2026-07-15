@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import axiosInstance from "@/lib/axios";
 import { useAuth } from "@/context/AuthContext";
+import ShortlistButton from "@/components/ShortlistButton";
 
 type Lawyer = {
   _id: string;
@@ -237,24 +238,33 @@ export default function LawyerDetailsPage() {
           </div>
         </div>
 
-        {user ? (
-          user.role === "user" ? (
-            <button
-              onClick={() => setShowModal(true)}
-              className="bg-primary dark:bg-white text-white dark:text-primary px-8 py-3 rounded-full font-medium hover:bg-primary-light dark:hover:bg-gray-soft transition"
-            >
-              Hire This Lawyer
-            </button>
+        {/* Buttons Section - Hire + Shortlist */}
+        <div className="flex items-center gap-3 justify-center">
+          {/* Shortlist Button - Only for logged in users */}
+          {user && user.role === "user" && (
+            <ShortlistButton lawyerId={id} />
+          )}
+          
+          {/* Hire Button - Only for clients */}
+          {user ? (
+            user.role === "user" ? (
+              <button
+                onClick={() => setShowModal(true)}
+                className="bg-primary dark:bg-white text-white dark:text-primary px-8 py-3 rounded-full font-medium hover:bg-primary-light dark:hover:bg-gray-soft transition"
+              >
+                Hire This Lawyer
+              </button>
+            ) : (
+              <p className="text-sm text-text-muted dark:text-white/50">
+                Only clients can hire lawyers.
+              </p>
+            )
           ) : (
             <p className="text-sm text-text-muted dark:text-white/50">
-              Only clients can hire lawyers.
+              Please login as a client to hire this lawyer.
             </p>
-          )
-        ) : (
-          <p className="text-sm text-text-muted dark:text-white/50">
-            Please login as a client to hire this lawyer.
-          </p>
-        )}
+          )}
+        </div>
       </div>
 
       {/* ============================================ */}
