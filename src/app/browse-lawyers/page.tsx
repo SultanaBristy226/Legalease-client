@@ -12,6 +12,7 @@ type Lawyer = {
   specialization: string;
   hourlyRate: number;
   status: string;
+  isHired?: boolean;
 };
 
 export default function BrowseLawyersPage() {
@@ -86,11 +87,19 @@ export default function BrowseLawyersPage() {
                 href={`/lawyers/${lawyer._id}`}
                 className="border-2 border-primary dark:border-white/20 rounded-xl p-5 text-center bg-white dark:bg-white/5 hover:bg-primary transition group relative"
               >
+                {/* Hired Badge */}
+                {lawyer.isHired && (
+                  <span className="absolute top-3 right-3 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">
+                    Hired
+                  </span>
+                )}
+
                 {lawyer.status === "busy" && (
-                  <span className="absolute top-3 right-3 bg-primary text-white text-xs px-2 py-0.5 rounded-full group-hover:bg-white group-hover:text-primary">
+                  <span className="absolute top-3 left-3 bg-primary text-white text-xs px-2 py-0.5 rounded-full group-hover:bg-white group-hover:text-primary">
                     Busy
                   </span>
                 )}
+
                 <div className="relative w-16 h-16 rounded-full overflow-hidden mx-auto mb-3 ring-2 ring-primary dark:ring-white/30 group-hover:ring-white transition">
                   <Image
                     src={lawyer.photo}

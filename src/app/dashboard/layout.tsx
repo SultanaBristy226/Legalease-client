@@ -13,6 +13,7 @@ import {
   FiHome,
   FiLogOut,
   FiSettings,
+  FiHeart,
 } from "react-icons/fi";
 import { useAuth } from "@/context/AuthContext";
 
@@ -43,6 +44,7 @@ export default function DashboardLayout({
     { name: "Overview", href: "/dashboard", icon: FiHome },
     { name: "Hiring History", href: "/dashboard/user/hiring-history", icon: FiBriefcase },
     { name: "My Comments", href: "/dashboard/user/comments", icon: FiMessageCircle },
+    { name: "Shortlist", href: "/dashboard/user/shortlist", icon: FiHeart },
     { name: "Settings", href: "/dashboard/user/update-profile", icon: FiSettings },
   ];
 
@@ -64,7 +66,6 @@ export default function DashboardLayout({
   const links =
     user.role === "admin" ? adminLinks : user.role === "lawyer" ? lawyerLinks : userLinks;
 
-  // Get user initial for avatar
   const getInitial = () => {
     return user.fullName?.charAt(0)?.toUpperCase() || "U";
   };
@@ -80,7 +81,6 @@ export default function DashboardLayout({
             </Link>
           </div>
 
-          {/* User Profile Summary */}
           <div className="px-4 pb-4 border-b border-gray-border dark:border-white/10">
             <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-soft/50 dark:bg-white/5">
               <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-heading text-sm">
@@ -97,7 +97,6 @@ export default function DashboardLayout({
             </div>
           </div>
 
-          {/* Navigation */}
           <nav className="p-4 space-y-1">
             {links.map((link) => {
               const Icon = link.icon;
@@ -133,7 +132,6 @@ export default function DashboardLayout({
 
         {/* Main Content */}
         <main className="flex-1 min-w-0">
-          {/* Mobile Header */}
           <header className="md:hidden bg-white dark:bg-[#1a1a1a] border-b border-gray-border dark:border-white/10 px-4 py-3 flex items-center justify-between">
             <Link href="/" className="font-heading text-lg font-semibold text-primary dark:text-white">
               LegalEase
@@ -151,7 +149,6 @@ export default function DashboardLayout({
             </div>
           </header>
 
-          {/* Page Content */}
           <div className="p-6 md:p-8">{children}</div>
         </main>
       </div>

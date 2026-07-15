@@ -4,8 +4,13 @@ import { useState, useEffect } from "react";
 import { FiHeart } from "react-icons/fi";
 import axiosInstance from "@/lib/axios";
 
-export default function ShortlistButton({ lawyerId }: { lawyerId: string }) {
-  const [isShortlisted, setIsShortlisted] = useState(false);
+interface ShortlistButtonProps {
+  lawyerId: string;
+  onToggle?: (shortlisted: boolean) => void;
+}
+
+export default function ShortlistButton({ lawyerId, onToggle }: ShortlistButtonProps) {
+  const [shortlisted, setShortlisted] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -16,10 +21,11 @@ export default function ShortlistButton({ lawyerId }: { lawyerId: string }) {
           setLoading(false);
           return;
         }
+        
         const res = await axiosInstance.get(`/shortlist/check/${lawyerId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setIsShortlisted(res.data.isShortlisted);
+        setShortlisted(res.data.shortlisted);
       } catch (err) {
         console.error("Failed to check shortlist:", err);
       } finally {
@@ -36,32 +42,41 @@ export default function ShortlistButton({ lawyerId }: { lawyerId: string }) {
         alert("Please login to shortlist lawyers.");
         return;
       }
-      await axiosInstance.post(
-        `/shortlist/toggle/${lawyerId}`,
-        {},
+
+      const res = await axiosInstance.post(
+        "/shortlist/toggle",
+        { lawyerId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setIsShortlisted(!isShortlisted);
+      
+      setShortlisted(res.data.shortlisted);
+      if (onToggle) onToggle(res.data.shortlisted);
     } catch (err: any) {
       alert(err.response?.data?.message || "Failed to update shortlist.");
     }
   };
 
-  if (loading) return null;
+  if (loading) {
+    return (
+      <button className="w-9 h-9 flex items-center justify-center rounded-full border border-gray-border dark:border-white/10">
+        <FiHeart className="text-text-muted" size={18} />
+      </button>
+    );
+  }
 
   return (
     <button
       onClick={toggleShortlist}
-      className={`p-3 rounded-full border transition ${
-        isShortlisted
-          ? "bg-red-500 border-red-500 text-white hover:bg-red-600"
-          : "border-gray-border dark:border-white/10 hover:bg-gray-soft dark:hover:bg-white/10"
+      className={`w-9 h-9 flex items-center justify-center rounded-full border transition ${
+        shortlisted
+          ? "bg-red-50 border-red-300 dark:bg-red-900/20 dark:border-red-500"
+          : "border-gray-border dark:border-white/10 hover:border-primary"
       }`}
-      aria-label={isShortlisted ? "Remove from shortlist" : "Add to shortlist"}
+      aria-label={shortlisted ? "Remove from shortlist" : "Add to shortlist"}
     >
       <FiHeart
-        size={20}
-        className={isShortlisted ? "fill-white" : ""}
+        size={18}
+        className={shortlisted ? "text-red-500 fill-red-500" : "text-text-muted"}
       />
     </button>
   );

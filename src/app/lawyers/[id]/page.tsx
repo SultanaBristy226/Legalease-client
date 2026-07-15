@@ -16,6 +16,7 @@ type Lawyer = {
   hourlyRate: number;
   status: string;
   createdAt: string;
+  isHired?: boolean;
 };
 
 type Comment = {
@@ -210,15 +211,23 @@ export default function LawyerDetailsPage() {
         <h1 className="font-heading text-3xl text-primary dark:text-white mb-1">{lawyer.name}</h1>
         <p className="text-text-muted dark:text-white/60 mb-3">{lawyer.specialization}</p>
 
-        <span
-          className={`inline-block text-xs px-3 py-1 rounded-full mb-6 ${
-            lawyer.status === "available"
-              ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
-              : "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400"
-          }`}
-        >
-          {lawyer.status === "available" ? "Available" : "Busy"}
-        </span>
+        <div className="flex items-center justify-center gap-3 mb-6">
+          <span
+            className={`inline-block text-xs px-3 py-1 rounded-full ${
+              lawyer.status === "available"
+                ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
+                : "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400"
+            }`}
+          >
+            {lawyer.status === "available" ? "Available" : "Busy"}
+          </span>
+          
+          {lawyer.isHired && (
+            <span className="inline-block text-xs px-3 py-1 rounded-full bg-green-500 text-white">
+              Hired
+            </span>
+          )}
+        </div>
 
         <div className="border border-gray-border dark:border-white/10 rounded-xl p-6 text-left mb-8 bg-white dark:bg-white/5">
           <h2 className="font-medium text-primary dark:text-white mb-2">About</h2>
@@ -238,33 +247,28 @@ export default function LawyerDetailsPage() {
           </div>
         </div>
 
-        {/* Buttons Section - Hire + Shortlist */}
-        <div className="flex items-center gap-3 justify-center">
-          {/* Shortlist Button - Only for logged in users */}
-          {user && user.role === "user" && (
-            <ShortlistButton lawyerId={id} />
-          )}
-          
-          {/* Hire Button - Only for clients */}
-          {user ? (
-            user.role === "user" ? (
+        {/* Hire Button with Shortlist */}
+        {user ? (
+          user.role === "user" ? (
+            <div className="flex items-center gap-3 justify-center">
+              <ShortlistButton lawyerId={id} />
               <button
                 onClick={() => setShowModal(true)}
                 className="bg-primary dark:bg-white text-white dark:text-primary px-8 py-3 rounded-full font-medium hover:bg-primary-light dark:hover:bg-gray-soft transition"
               >
                 Hire This Lawyer
               </button>
-            ) : (
-              <p className="text-sm text-text-muted dark:text-white/50">
-                Only clients can hire lawyers.
-              </p>
-            )
+            </div>
           ) : (
             <p className="text-sm text-text-muted dark:text-white/50">
-              Please login as a client to hire this lawyer.
+              Only clients can hire lawyers.
             </p>
-          )}
-        </div>
+          )
+        ) : (
+          <p className="text-sm text-text-muted dark:text-white/50">
+            Please login as a client to hire this lawyer.
+          </p>
+        )}
       </div>
 
       {/* ============================================ */}
