@@ -17,12 +17,17 @@ export default function PaymentSuccessPage() {
       const paymentIntentId = searchParams.get("payment_intent");
       const redirectStatus = searchParams.get("redirect_status");
 
-      console.log("Payment Intent ID:", paymentIntentId);
-      console.log("Redirect Status:", redirectStatus);
+      console.log("🔍 Payment Intent ID:", paymentIntentId);
+      console.log("🔍 Redirect Status:", redirectStatus);
 
       if (redirectStatus === "succeeded") {
         setStatus("success");
         setLoading(false);
+        
+        // Refresh hiring history after 2 seconds
+        setTimeout(() => {
+          router.push("/dashboard/user/hiring-history");
+        }, 2000);
         return;
       }
 
@@ -35,7 +40,7 @@ export default function PaymentSuccessPage() {
 
       try {
         const token = localStorage.getItem("token");
-        console.log("Confirming payment with token:", token);
+        console.log("🔍 Confirming payment with token:", token ? "Yes" : "No");
 
         const res = await axiosInstance.post(
           "/payment/confirm-payment",
@@ -43,16 +48,20 @@ export default function PaymentSuccessPage() {
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
-        console.log("Confirm payment response:", res.data);
+        console.log("✅ Confirm payment response:", res.data);
 
         if (res.data.message === "Payment successful") {
           setStatus("success");
+          // Refresh hiring history after 2 seconds
+          setTimeout(() => {
+            router.push("/dashboard/user/hiring-history");
+          }, 2000);
         } else {
           setStatus("error");
           setMessage(res.data.message || "Payment confirmation failed");
         }
       } catch (err: any) {
-        console.error("Payment confirmation error:", err.response?.data || err.message);
+        console.error("❌ Payment confirmation error:", err.response?.data || err.message);
         setStatus("error");
         setMessage(err.response?.data?.message || "Payment confirmation failed");
       } finally {
@@ -61,7 +70,7 @@ export default function PaymentSuccessPage() {
     };
 
     confirmPayment();
-  }, [searchParams]);
+  }, [searchParams, router]);
 
   if (loading) {
     return (
@@ -100,21 +109,8 @@ export default function PaymentSuccessPage() {
         </svg>
       </div>
       <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Payment Successful!</h1>
-      <p className="text-gray-600 dark:text-gray-400 mb-6">Your payment has been completed successfully.</p>
-      <div className="flex gap-4">
-        <Link
-          href="/dashboard/user/hiring-history"
-          className="bg-primary text-white px-6 py-2 rounded-full hover:bg-primary-light transition"
-        >
-          View Hiring History
-        </Link>
-        <Link
-          href="/"
-          className="border border-gray-300 text-gray-700 px-6 py-2 rounded-full hover:bg-gray-50 transition"
-        >
-          Go Home
-        </Link>
-      </div>
+      <p className="text-gray-600 dark:text-gray-400 mb-6">Redirecting to hiring history...</p>
+      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
     </div>
   );
 }
