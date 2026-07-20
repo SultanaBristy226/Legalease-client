@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import axiosInstance from "@/lib/axios";
+import PaymentButton from "@/components/PaymentButton";
 
 type HiringRequestItem = {
   _id: string;
@@ -15,7 +16,6 @@ type HiringRequestItem = {
 export default function UserHiringHistoryPage() {
   const [requests, setRequests] = useState<HiringRequestItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [payingId, setPayingId] = useState<string | null>(null);
 
   const fetchRequests = async () => {
     try {
@@ -35,64 +35,52 @@ export default function UserHiringHistoryPage() {
     fetchRequests();
   }, []);
 
-  const handlePay = async (id: string) => {
-    setPayingId(id);
-    try {
-      const token = localStorage.getItem("token");
-      // NOTE: This is a placeholder pay action until Stripe is integrated.
-      await axiosInstance.patch(
-        `/hiring/${id}/pay`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      fetchRequests();
-    } catch (err) {
-      console.error("Payment failed:", err);
-    } finally {
-      setPayingId(null);
-    }
-  };
-
   if (loading) {
     return <p className="text-text-muted">Loading...</p>;
   }
 
   return (
     <div>
-      <h1 className="font-heading text-2xl text-primary mb-6">Hiring History</h1>
+      <h1 className="font-heading text-2xl text-primary dark:text-white mb-6">
+        Hiring History
+      </h1>
 
       {requests.length === 0 ? (
-        <p className="text-text-muted">You haven&apos;t hired any lawyers yet.</p>
+        <p className="text-text-muted dark:text-white/50">
+          You haven&apos;t hired any lawyers yet.
+        </p>
       ) : (
-        <div className="overflow-x-auto border border-gray-border rounded-xl">
+        <div className="overflow-x-auto border border-gray-border dark:border-white/10 rounded-xl">
           <table className="w-full text-sm">
-            <thead className="bg-gray-soft text-left">
+            <thead className="bg-gray-soft dark:bg-white/5 text-left">
               <tr>
-                <th className="px-4 py-3">Lawyer</th>
-                <th className="px-4 py-3">Specialization</th>
-                <th className="px-4 py-3">Fee</th>
-                <th className="px-4 py-3">Date</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3">Payment</th>
+                <th className="px-4 py-3 text-primary dark:text-white">Lawyer</th>
+                <th className="px-4 py-3 text-primary dark:text-white">Specialization</th>
+                <th className="px-4 py-3 text-primary dark:text-white">Fee</th>
+                <th className="px-4 py-3 text-primary dark:text-white">Date</th>
+                <th className="px-4 py-3 text-primary dark:text-white">Status</th>
+                <th className="px-4 py-3 text-primary dark:text-white">Payment</th>
               </tr>
             </thead>
             <tbody>
               {requests.map((req) => (
-                <tr key={req._id} className="border-t border-gray-border">
-                  <td className="px-4 py-3">{req.lawyer?.name}</td>
-                  <td className="px-4 py-3">{req.lawyer?.specialization}</td>
-                  <td className="px-4 py-3">${req.fee}</td>
-                  <td className="px-4 py-3">
+                <tr key={req._id} className="border-t border-gray-border dark:border-white/10">
+                  <td className="px-4 py-3 text-primary dark:text-white">{req.lawyer?.name}</td>
+                  <td className="px-4 py-3 text-text-muted dark:text-white/60">
+                    {req.lawyer?.specialization}
+                  </td>
+                  <td className="px-4 py-3 text-primary dark:text-white">${req.fee}</td>
+                  <td className="px-4 py-3 text-text-muted dark:text-white/60">
                     {new Date(req.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-4 py-3">
                     <span
                       className={`text-xs px-2 py-1 rounded-full ${
                         req.status === "accepted"
-                          ? "bg-green-100 text-green-700"
+                          ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
                           : req.status === "rejected"
-                          ? "bg-red-100 text-red-700"
-                          : "bg-yellow-100 text-yellow-700"
+                          ? "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400"
+                          : "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400"
                       }`}
                     >
                       {req.status}
@@ -101,23 +89,14 @@ export default function UserHiringHistoryPage() {
                   <td className="px-4 py-3">
                     {req.status === "accepted" ? (
                       req.isPaid ? (
-                        <button
-                          disabled
-                          className="bg-gray-soft text-text-muted text-xs px-3 py-1.5 rounded-full cursor-not-allowed"
-                        >
+                        <span className="text-green-600 dark:text-green-400 font-medium text-xs">
                           Paid
-                        </button>
+                        </span>
                       ) : (
-                        <button
-                          onClick={() => handlePay(req._id)}
-                          disabled={payingId === req._id}
-                          className="bg-primary text-white text-xs px-3 py-1.5 rounded-full hover:bg-primary-light transition disabled:opacity-60"
-                        >
-                          {payingId === req._id ? "Processing..." : "Pay"}
-                        </button>
+                        <PaymentButton hiringId={req._id} amount={req.fee} />
                       )
                     ) : (
-                      <span className="text-text-muted text-xs">—</span>
+                      <span className="text-text-muted dark:text-white/40 text-xs">—</span>
                     )}
                   </td>
                 </tr>
