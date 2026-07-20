@@ -1,53 +1,122 @@
-# LegalEase - Online Lawyer Hiring Platform
+# ⚖️ LegalEase - Online Lawyer Hiring Platform
+
+LegalEase is a modern full-stack lawyer hiring platform where users can find verified lawyers, send hiring requests, make secure payments, and leave reviews. Lawyers can manage their professional profiles and hiring requests, while administrators oversee users, transactions, and platform analytics.
 
 ## 🌐 Live Demo
-- **Website**: https://legalease-client-opal.vercel.app/
-- **API Server**: https://legalease-server-iqg1.onrender.com
 
-## 👤 Admin Access
-- **Email**: bristy@gmail.com
-- **Password**: 12345678
+- **Website:** https://legalease-client-opal.vercel.app/
+- **Backend API:** https://legalease-server-iqg1.onrender.com
 
-## 📖 About
-LegalEase is a full-stack web application that connects clients with verified lawyers. Clients can browse lawyers, hire them, make payments, and leave reviews. Lawyers can manage their profiles, accept/reject hiring requests, and track their earnings. Admins can manage users, view transactions, and access platform analytics.
+---
 
-## ✨ Features
-- Register/Login with JWT
-- Role-based access (User, Lawyer, Admin)
-- Browse lawyers with search & filter
-- View lawyer profiles with details
-- Hire lawyers
-- Make payments (Stripe Integration)
-- Leave comments & ratings
-- Track hiring history
-- Update profile with image upload
-- Create & manage legal profile
-- Accept/reject hiring requests
-- Manage users (change roles, delete)
-- View all transactions
-- Platform analytics dashboard
-- Dark/Light mode toggle
-- Responsive design (mobile-first)
-- Smooth animations (Framer Motion)
-- Professional black-white theme
+# 🔑 Demo Credentials
 
-## 🛠️ Tech Stack
+### Admin
+
+```text
+Email: bristy@gmail.com
+Password: 12345678
+```
+
+---
+
+# ✨ Features
+
+## 🔐 Authentication
+
+- JWT Authentication
+- Role-based Authorization
+- Protected Routes
+- Secure Password Hashing
+
+## 👤 User Features
+
+- Register & Login
+- Browse Lawyers
+- Search & Filter Lawyers
+- View Lawyer Details
+- Hire Lawyers
+- Payment System
+- View Hiring History
+- Leave Ratings & Reviews
+- Update Profile
+
+## 👨‍⚖️ Lawyer Features
+
+- Create Professional Profile
+- Edit Lawyer Information
+- Accept/Reject Hiring Requests
+- Track Total Hires
+- Manage Availability
+
+## 👑 Admin Features
+
+- Manage Users
+- Change User Roles
+- Delete Users
+- View All Transactions
+- Analytics Dashboard
+
+## 🎨 UI Features
+
+- Responsive Design
+- Mobile Friendly
+- Dark & Light Theme
+- Smooth Animations
+- Clean Black & White Interface
+
+---
+
+# 🛠️ Tech Stack
+
 | Technology | Purpose |
 |------------|---------|
 | Next.js 16 | React Framework |
 | TypeScript | Type Safety |
 | Tailwind CSS | Styling |
 | React Context API | State Management |
+| Axios | API Requests |
 | Framer Motion | Animations |
-| Axios | HTTP Client |
 | React Icons | Icons |
-| Stripe | Payment Processing |
-| imgBB | Image Upload |
-| Better Auth | Authentication |
-| Vercel | Frontend Deployment |
-| Render | Backend Deployment |
+| Vercel | Deployment |
 
-## 📄 Pages
+---
+
+# 📁 Project Structure
+
+```text
+client/
+│
+├── public/
+├── src/
+│   ├── app/
+│   │   ├── dashboard/
+│   │   │   ├── admin/
+│   │   │   ├── lawyer/
+│   │   │   └── user/
+│   │   ├── lawyers/
+│   │   ├── browse-lawyers/
+│   │   ├── login/
+│   │   ├── register/
+│   │   └── ...
+│   │
+│   ├── components/
+│   ├── context/
+│   ├── hooks/
+│   ├── lib/
+│   ├── services/
+│   ├── types/
+│   └── utils/
+│
+├── .env.local
+├── package.json
+└── README.md
+```
+
+---
+
+# 📄 Pages
+
 | Page | Route | Access |
 |------|-------|--------|
 | Home | `/` | Public |
@@ -56,21 +125,135 @@ LegalEase is a full-stack web application that connects clients with verified la
 | Browse Lawyers | `/browse-lawyers` | Public |
 | Lawyer Details | `/lawyers/[id]` | Public |
 | Dashboard | `/dashboard` | Private |
-| User Dashboard | `/dashboard/user/*` | User only |
-| Lawyer Dashboard | `/dashboard/lawyer/*` | Lawyer only |
-| Admin Dashboard | `/dashboard/admin/*` | Admin only |
+| User Dashboard | `/dashboard/user/*` | User |
+| Lawyer Dashboard | `/dashboard/lawyer/*` | Lawyer |
+| Admin Dashboard | `/dashboard/admin/*` | Admin |
 
-## 🎨 Design System
-- **Primary**: `#0a0a0a` (Black)
-- **Secondary**: `#ffffff` (White)
-- **Text Muted**: `#6b6b6b` (Gray)
-- **Border**: `#e0e0e0` (Light Gray)
-- **Headings**: Playfair Display (Serif)
-- **Body**: Inter (Sans-serif)
+---
 
+# 🎨 Design System
 
-👩‍💻 Developer
+### Colors
 
-Sultana Bristy - GitHub: https://github.com/SultanaBristy226
+| Color | Value |
+|--------|-------|
+| Primary | `#0A0A0A` |
+| Secondary | `#FFFFFF` |
+| Muted Text | `#6B7280` |
+| Border | `#E5E7EB` |
 
-Made with ❤️ for LegalEase
+### Typography
+
+- **Headings:** Playfair Display
+- **Body:** Inter
+
+---
+
+# ⚙️ Environment Variables
+
+Create a **.env.local** file.
+
+```env
+NEXT_PUBLIC_API_URL=https://legalease-server-iqg1.onrender.com/api
+```
+
+---
+
+# 💻 Local Development
+
+## Prerequisites
+
+- Node.js 18+
+- npm or yarn
+
+## Installation
+
+Clone the repository
+
+```bash
+git clone https://github.com/SultanaBristy226/legalease-client.git
+```
+
+Navigate to the project
+
+```bash
+cd legalease-client
+```
+
+Install dependencies
+
+```bash
+npm install
+```
+
+Create environment file
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
+```
+
+Run the development server
+
+```bash
+npm run dev
+```
+
+Visit:
+
+```
+http://localhost:3000
+```
+
+---
+
+# 🚀 Production Build
+
+```bash
+npm run build
+npm start
+```
+
+---
+
+# 🤝 Contributing
+
+Contributions are welcome!
+
+1. Fork the repository
+2. Create a feature branch
+
+```bash
+git checkout -b feature/AmazingFeature
+```
+
+3. Commit your changes
+
+```bash
+git commit -m "Add AmazingFeature"
+```
+
+4. Push to GitHub
+
+```bash
+git push origin feature/AmazingFeature
+```
+
+5. Open a Pull Request
+
+---
+
+# 📄 License
+
+This project is licensed under the **MIT License**.
+
+---
+
+# 👩‍💻 Developer
+
+**Sultana Bristy**
+
+- GitHub: https://github.com/SultanaBristy226
+
+---
+
+⭐ **If you like this project, don't forget to give it a star on GitHub!**
