@@ -15,6 +15,7 @@ export default function Footer() {
     <footer className="bg-primary text-white dark:bg-[#0a0a0a] dark:border-t dark:border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+          {/* Brand */}
           <div>
             <h3 className="font-heading text-xl font-semibold mb-3">LegalEase</h3>
             <p className="text-sm text-white/60 leading-relaxed">
@@ -23,32 +24,34 @@ export default function Footer() {
             </p>
           </div>
 
+          {/* Quick Links */}
           <div>
             <h4 className="text-sm font-semibold uppercase tracking-wide text-white/80 mb-4">
               Quick Links
             </h4>
             <ul className="space-y-2 text-sm text-white/60">
               <li>
-                <Link href="/about" className="hover:text-white transition">
-                  About
+                <Link href="/" className="hover:text-white transition">
+                  Home
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-white transition">
-                  Contact
+                <Link href="/browse-lawyers" className="hover:text-white transition">
+                  Browse Lawyers
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/privacy-policy"
+                  href="/dashboard"
                   className="hover:text-white transition"
                 >
-                  Privacy Policy
+                  Dashboard
                 </Link>
               </li>
             </ul>
           </div>
 
+          {/* Social Media */}
           <div>
             <h4 className="text-sm font-semibold uppercase tracking-wide text-white/80 mb-4">
               Follow Us
@@ -85,6 +88,7 @@ export default function Footer() {
             </div>
           </div>
 
+          {/* Newsletter */}
           <div>
             <h4 className="text-sm font-semibold uppercase tracking-wide text-white/80 mb-4">
               Newsletter
@@ -111,6 +115,7 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* Bottom Bar */}
         <div className="border-t border-white/10 mt-10 pt-6 text-center text-sm text-white/50">
           Copyright {year} LegalEase. All rights reserved.
         </div>
