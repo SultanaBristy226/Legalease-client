@@ -1,20 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import axiosInstance from "@/lib/axios";
 
 export default function PaymentSuccessPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState<"success" | "error" | null>(null);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const confirmPayment = async () => {
-      const params = new URLSearchParams(window.location.search);
-      const paymentIntentId = params.get("payment_intent");
-      const redirectStatus = params.get("redirect_status");
+      const paymentIntentId = searchParams.get("payment_intent");
+      const redirectStatus = searchParams.get("redirect_status");
+
+      console.log("Payment Intent ID:", paymentIntentId);
+      console.log("Redirect Status:", redirectStatus);
 
       if (redirectStatus === "succeeded") {
         setStatus("success");
@@ -22,27 +26,42 @@ export default function PaymentSuccessPage() {
         return;
       }
 
-      if (paymentIntentId) {
-        try {
-          const token = localStorage.getItem("token");
-          await axiosInstance.post(
-            "/payment/confirm-payment",
-            { paymentIntentId },
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
-          setStatus("success");
-        } catch (err) {
-          console.error("Payment confirmation failed:", err);
-          setStatus("error");
-        }
-      } else {
+      if (!paymentIntentId) {
         setStatus("error");
+        setMessage("No payment intent found");
+        setLoading(false);
+        return;
       }
-      setLoading(false);
+
+      try {
+        const token = localStorage.getItem("token");
+        console.log("Confirming payment with token:", token);
+
+        const res = await axiosInstance.post(
+          "/payment/confirm-payment",
+          { paymentIntentId },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        console.log("Confirm payment response:", res.data);
+
+        if (res.data.message === "Payment successful") {
+          setStatus("success");
+        } else {
+          setStatus("error");
+          setMessage(res.data.message || "Payment confirmation failed");
+        }
+      } catch (err: any) {
+        console.error("Payment confirmation error:", err.response?.data || err.message);
+        setStatus("error");
+        setMessage(err.response?.data?.message || "Payment confirmation failed");
+      } finally {
+        setLoading(false);
+      }
     };
 
     confirmPayment();
-  }, []);
+  }, [searchParams]);
 
   if (loading) {
     return (
@@ -62,7 +81,7 @@ export default function PaymentSuccessPage() {
           </svg>
         </div>
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Payment Failed</h1>
-        <p className="text-gray-600 mb-6">Something went wrong with your payment. Please try again.</p>
+        <p className="text-gray-600 mb-6">{message || "Something went wrong. Please try again."}</p>
         <Link
           href="/dashboard/user/hiring-history"
           className="bg-primary text-white px-6 py-2 rounded-full hover:bg-primary-light transition"
